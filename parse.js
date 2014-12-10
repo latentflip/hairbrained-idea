@@ -1,37 +1,48 @@
-var each = require('amp-each');
 var tagRE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
 
 
 module.exports = function parse(html) {
     var result;
-
-    var matches = html.match(tagRE);
     var current;
     var previous;
     var level = -1;
     var arr = [];
+    var byTag = {};
 
-    each(matches, function (tag) {
+    html.replace(tagRE, function (tag, index) {
         var isOpen = tag.charAt(1) !== '/';
-        var isClose = tag.indexOf('/') !== -1;
         var tagName = tag.split(' ', 1)[0].replace(/[ <>\/]*/g, '');
-        var closeOnly = isClose && !isOpen;
-        var selfClose = isClose && isOpen;
+        var closeOnly = tag.charAt(1) === '/';
+        var selfClose = tag.slice(-2, -1) === '/';
+        var isClose = closeOnly || selfClose;
         
         previous = current;
         
-        if (isOpen) level++;
-        if (isClose && !selfClose) level--;
+        if (isOpen) {
+            level++;
+        }
 
         if (!closeOnly) {
             current = {
                 name: tagName,
                 children: [],
-                selfClosing: selfClose
+                selfClosing: selfClose,
+                start: index + tag.length,
+                attrs: tag.slice(tagName.length + 1, (selfClose ? tag.indexOf('>') - 1 : tag.indexOf('>'))).trim(),
+                preText: '',
+                postText: ''
             };
 
+            if (html.charAt(current.start) !== '<') {
+                current.preText = html.slice(current.start, html.indexOf('<', current.start));
+            }
+
+            byTag[tagName] = current;
+
             // grab our base if we have it
-            if (!previous) result = current;
+            if (!previous) {
+                result = current;
+            }
 
             var parent = arr[level - 1];
 
@@ -40,6 +51,17 @@ module.exports = function parse(html) {
             }
 
             arr[level] = current;
+        }
+
+        if (isClose) {
+            level--;
+            var start = index + tag.length;
+            var nextChar = html.charAt(start);
+            if (nextChar !== '<' && nextChar) {
+                // trailing text node
+                var sliced = html.slice(start);
+                (current || previous).postText = sliced.slice(0, sliced.indexOf('<'));
+            }
         }
     }); 
 

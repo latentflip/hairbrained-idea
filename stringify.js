@@ -2,17 +2,14 @@ var each = require('amp-each');
 
 
 function stringify(buff, doc) {
-    var start = buff + '<' + doc.name + (doc.selfClosing ? '/>' : '>');
+    buff += '<' + doc.name + (doc.attrs ? ' ' + doc.attrs : '') + (doc.selfClosing ? '/>' : '>');
     if (doc.selfClosing) {
-        console.log('returning');
-        return start;
+        return doc.preText + buff + doc.postText;
     }
-    var middle = doc.children.reduce(stringify, '');
-    return start + middle + '</' + doc.name + '>';
+    var middle = doc.preText + doc.children.reduce(stringify, '');
+    return buff + middle + '</' + doc.name + '>' + doc.postText;
 }
 
 module.exports = function (doc) {
-    var buff = '';
-    var result = stringify('', doc);
-    console.log(result);
+    return stringify('', doc);
 };

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node test/test.js",
-     "start": "run-browser test/test.js"
+    "start": "run-browser test/test.js"
   },
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "license": "MIT",
