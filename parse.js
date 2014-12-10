@@ -1,6 +1,4 @@
 var tagRE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
-var attributesRE = /[a-zA-Z0-9\-_]+=/g;
-var parseAttrs = require('./parseAttrs');
 
 module.exports = function parse(html) {
     var result;
@@ -30,7 +28,7 @@ module.exports = function parse(html) {
                 name: tagName,
                 children: [],
                 selfClosing: selfClose,
-                attrs: parseAttrs(tag.slice(tagName.length + 1, (selfClose ? tag.indexOf('>') - 1 : tag.indexOf('>'))).trim()),
+                attrs: tag.slice(tagName.length + 1, (selfClose ? tag.indexOf('>') - 1 : tag.indexOf('>'))).trim(),
                 preText: '',
                 postText: ''
             };

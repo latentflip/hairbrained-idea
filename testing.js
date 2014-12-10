@@ -6,17 +6,19 @@ var htmlparser2 = require('htmlparser2');
 var parser = new htmlparser2.Parser();
 
 
+
 setTimeout(function () {
-    var i = 20;
-    var parsed;
+    var i = 100;
+    //var parsed;
     while(i--) {
         modified += "<div></div>";
         console.time('mine');
-        parseHtml(modified);
-        //var diff = doDiff(originalParsed, parseHtml(modified));
+        //parseHtml(modified);
+        var diff = doDiff(originalParsed, parseHtml(modified));
         console.timeEnd('mine');
     }
 
+    /*
     modified = src;
     i = 20;
     while(i--) {
@@ -38,6 +40,7 @@ setTimeout(function () {
         //parser.parseComplete(modified);
         console.timeEnd('innerHTML');
     }
+    */
 }, 1000);
 
 var originalParsed = parseHtml(src);

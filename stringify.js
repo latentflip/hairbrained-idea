@@ -1,8 +1,18 @@
 var each = require('amp-each');
 
+function attrString(attrs) {
+    var buff = [];
+    for (var key in attrs) {
+        buff.push(key + '="' + attrs[key] + '"');
+    }
+    if (!buff.length) {
+        return '';
+    }
+    return ' ' + buff.join(' ');
+}
 
 function stringify(buff, doc) {
-    buff += '<' + doc.name + (doc.attrs ? ' ' + doc.attrs : '') + (doc.selfClosing ? '/>' : '>');
+    buff += '<' + doc.name + (doc.attrs ? attrString(doc.attrs) : '') + (doc.selfClosing ? '/>' : '>');
     if (doc.selfClosing) {
         return doc.preText + buff + doc.postText;
     }
