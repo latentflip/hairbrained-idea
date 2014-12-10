@@ -1,0 +1,25 @@
+{
+  "name": "html-diffing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test.js",
+     "start": "run-browser test/test.js"
+  },
+  "author": "Henrik Joreteg <henrik@andyet.net>",
+  "license": "MIT",
+  "dependencies": {
+    "amp-each": "^1.0.0",
+    "diff": "^1.2.0",
+    "docdiff": "0.0.1",
+    "phantomjs": "^1.9.12",
+    "run-browser": "^2.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^7.0.0",
+    "tap-spec": "^2.1.1",
+    "tape": "^3.0.3",
+    "tape-run": "^0.3.0"
+  }
+}
