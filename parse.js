@@ -1,5 +1,4 @@
 var tagRE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
-var attributesRE = /[a-zA-Z0-9\-_]+=/g;
 var parseAttrs = require('./parseAttrs');
 
 
@@ -28,16 +27,18 @@ module.exports = function parse(html) {
 
         if (!closeOnly) {
             current = {
+                type: 'tag',
                 name: tagName,
                 children: [],
                 selfClosing: selfClose,
-                attrs: parseAttrs(tag.slice(tagName.length + 1, (selfClose ? tag.indexOf('>') - 1 : tag.indexOf('>'))).trim()),
-                preText: '',
-                postText: ''
+                attrs: parseAttrs(tag.slice(tagName.length + 1, (selfClose ? tag.indexOf('>') - 1 : tag.indexOf('>'))).trim())
             };
 
             if (nextChar !== '<') {
-                current.preText = html.slice(start, html.indexOf('<', start));
+                current.children.push({
+                    type: 'text',
+                    content: html.slice(start, html.indexOf('<', start))
+                });
             }
 
             byTag[tagName] = current;
@@ -60,8 +61,10 @@ module.exports = function parse(html) {
             level--;
             if (nextChar !== '<' && nextChar) {
                 // trailing text node
-                var sliced = html.slice(start);
-                (current || previous).postText = sliced.slice(0, sliced.indexOf('<'));
+                arr[level].children.push({
+                    type: 'text',
+                    content: html.slice(start, html.indexOf('<', start))
+                });
             }
         }
     }); 

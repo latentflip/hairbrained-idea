@@ -12,12 +12,14 @@ function attrString(attrs) {
 }
 
 function stringify(buff, doc) {
-    buff += '<' + doc.name + (doc.attrs ? attrString(doc.attrs) : '') + (doc.selfClosing ? '/>' : '>');
-    if (doc.selfClosing) {
-        return doc.preText + buff + doc.postText;
+    switch (doc.type) {
+    case 'text':
+        return buff + doc.content;
+    case 'tag':
+        buff += '<' + doc.name + (doc.attrs ? attrString(doc.attrs) : '') + (doc.selfClosing ? '/>' : '>');
+        if (doc.selfClosing) return buff;
+        return buff + doc.children.reduce(stringify, '') + '</' + doc.name + '>';
     }
-    var middle = doc.preText + doc.children.reduce(stringify, '');
-    return buff + middle + '</' + doc.name + '>' + doc.postText;
 }
 
 module.exports = function (doc) {
