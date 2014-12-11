@@ -5,7 +5,7 @@ var stringify = require('../stringify');
 
 test('parse', function (t) {
     var html = '<div class="oh"><p></p></div>';
-    var parsed = parse('<div class="oh"><p></p></div>');    
+    var parsed = parse(html);    
     t.deepEqual(parsed, {
         type: 'tag',
         name: 'div',
@@ -101,6 +101,37 @@ test('parse', function (t) {
         ]
     });
     t.equal(html, stringify(parsed));
+
+    html = '<div class="handles multiple classes" and="attributes"></div>';
+    parsed = parse(html);
+
+    t.deepEqual(parsed, {
+        type: 'tag',
+        name: 'div',
+        attrs: {
+            class: 'handles multiple classes',
+            and: 'attributes'
+        },
+        selfClosing: false,
+        children: []
+    });
+    t.equal(html, stringify(parsed));
+
+    html = '<div class=\'handles\' other=47 and="attributes"></div>';
+    parsed = parse(html);
+
+    t.deepEqual(parsed, {
+        type: 'tag',
+        name: 'div',
+        attrs: {
+            class: 'handles',
+            other: '47',
+            and: 'attributes'
+        },
+        selfClosing: false,
+        children: []
+    });
+    t.equal(stringify(parsed), '<div class="handles" other="47" and="attributes"></div>');
 
     t.end();
 });
