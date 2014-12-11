@@ -1,0 +1,14 @@
+{
+  "name": "reactydemo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "beefy app.jsx -- -t reactify"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "reactify": "^0.17.1"
+  }
+}

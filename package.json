@@ -1,7 +1,7 @@
 {
   "name": "html-diffing",
   "version": "1.0.0",
-  "description": "",
+  "description": "please ignore",
   "main": "index.js",
   "scripts": {
     "test": "node test/index.js",
@@ -35,5 +35,16 @@
     "tap-spec": "^2.1.1",
     "tape": "^3.0.3",
     "tape-run": "^0.3.0"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/henrikjoreteg/hairbrained-idea"
+  },
+  "bugs": {
+    "url": "https://github.com/henrikjoreteg/hairbrained-idea/issues"
+  },
+  "homepage": "https://github.com/henrikjoreteg/hairbrained-idea"
 }
