@@ -1,5 +1,5 @@
 var tagRE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
-var parseAttrs = require('./parseAttrs');
+var parseTag = require('./parseTag');
 
 
 module.exports = function parse(html) {
@@ -12,10 +12,6 @@ module.exports = function parse(html) {
 
     html.replace(tagRE, function (tag, index) {
         var isOpen = tag.charAt(1) !== '/';
-        var tagName = tag.split(' ', 1)[0].replace(/[ <>\/]*/g, '');
-        var closeOnly = tag.charAt(1) === '/';
-        var selfClose = tag.slice(-2, -1) === '/';
-        var isClose = closeOnly || selfClose;
         var start = index + tag.length;
         var nextChar = html.charAt(start);
         var parent;
@@ -24,16 +20,8 @@ module.exports = function parse(html) {
         
         if (isOpen) {
             level++;
-        }
-
-        if (!closeOnly) {
-            current = {
-                type: 'tag',
-                name: tagName,
-                children: [],
-                selfClosing: selfClose,
-                attrs: parseAttrs(tag.slice(tagName.length + 1, (selfClose ? tag.indexOf('>') - 1 : tag.indexOf('>'))).trim())
-            };
+            
+            current = parseTag(tag);
 
             if (nextChar !== '<') {
                 current.children.push({
@@ -42,9 +30,9 @@ module.exports = function parse(html) {
                 });
             }
 
-            byTag[tagName] = current;
+            byTag[current.tagName] = current;
 
-            // grab our base if we have it
+            // this is our base if we don't already have one
             if (!previous) {
                 result = current;
             }
@@ -58,7 +46,7 @@ module.exports = function parse(html) {
             arr[level] = current;
         }
 
-        if (isClose) {
+        if (!isOpen || current.selfClosing) {
             level--;
             if (nextChar !== '<' && nextChar) {
                 // trailing text node

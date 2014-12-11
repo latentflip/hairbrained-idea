@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node test/test.js",
+    "test": "node test/index.js",
     "start": "run-browser test/test.js"
   },
   "author": "Henrik Joreteg <henrik@andyet.net>",
