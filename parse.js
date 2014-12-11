@@ -18,6 +18,7 @@ module.exports = function parse(html) {
         var isClose = closeOnly || selfClose;
         var start = index + tag.length;
         var nextChar = html.charAt(start);
+        var parent;
         
         previous = current;
         
@@ -48,7 +49,7 @@ module.exports = function parse(html) {
                 result = current;
             }
 
-            var parent = arr[level - 1];
+            parent = arr[level - 1];
 
             if (parent) {
                 parent.children.push(current);
