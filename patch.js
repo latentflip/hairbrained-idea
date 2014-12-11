@@ -52,4 +52,4 @@ var methodMap = {
 
 module.exports = function (el, diff) {
     return methodMap[diff.kind](el, diff);
-}
+};

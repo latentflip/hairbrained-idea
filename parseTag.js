@@ -1,4 +1,4 @@
-var attrRE = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g
+var attrRE = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g;
 
 
 module.exports = function (tag) {
@@ -17,7 +17,7 @@ module.exports = function (tag) {
             key = match;
         } else {
             if (i === 0) {
-                res.name = match
+                res.name = match;
             } else {
                 res.attrs[key] = match.replace(/['"]/g, '');
             }

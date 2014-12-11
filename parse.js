@@ -1,8 +1,11 @@
 var tagRE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
 var parseTag = require('./parseTag');
+var parseComponent = require('./parseComponent');
 
 
-module.exports = function parse(html) {
+module.exports = function parse(html, options) {
+    options = options || {};
+    options.components = options.components || {};
     var result;
     var current;
     var previous;
@@ -22,6 +25,9 @@ module.exports = function parse(html) {
             level++;
             
             current = parseTag(tag);
+            if (current.type === 'tag' && options.components[current.name]) {
+                current.type = 'component';
+            }
 
             if (nextChar !== '<') {
                 current.children.push({

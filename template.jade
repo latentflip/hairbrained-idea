@@ -1,0 +1,8 @@
+div
+  | hi!
+  = time
+  if someString.length < 20
+    my-subview(key="foo", aPropFromAbove='{someString}', model='{model}')
+
+  each val in listOfThings
+    my-subview(key=val, aPropFromAbove=val, model='{model}')
