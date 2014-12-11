@@ -2,6 +2,7 @@ var tagRE = /<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g;
 var attributesRE = /[a-zA-Z0-9\-_]+=/g;
 var parseAttrs = require('./parseAttrs');
 
+
 module.exports = function parse(html) {
     var result;
     var current;

@@ -1,5 +1,6 @@
 var attrRE = /([\w-]+)|['"]{1}([^'"]*)['"]{1}/g
 
+
 module.exports = function (str) {
     var i = 0;
     var key;
