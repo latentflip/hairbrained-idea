@@ -2,19 +2,20 @@ var src = "<div class=\"landing\"><div class=\"container\"><section id=\"pages\"
 //var doDiff = require('docdiff');
 var doDiff = require('deep-diff').diff;
 var parseHtml = require('./parse');
-var htmlparser2 = require('htmlparser2');
-var parser = new htmlparser2.Parser();
+//var htmlparser2 = require('htmlparser2');
+//var parser = new htmlparser2.Parser();
 
 
 
 setTimeout(function () {
     var i = 100;
+    var diff;
     //var parsed;
     while(i--) {
         modified += "<div></div>";
         console.time('mine');
-        //parseHtml(modified);
-        var diff = doDiff(originalParsed, parseHtml(modified));
+        parseHtml(modified);
+        //diff = doDiff(originalParsed, parseHtml(modified));
         console.timeEnd('mine');
     }
 

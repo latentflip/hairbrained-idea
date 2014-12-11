@@ -11,7 +11,7 @@ module.exports = function (str) {
         } else {
             key = match;
         }
-        i++
+        i++;
     });
 
     return res;
