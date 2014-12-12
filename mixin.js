@@ -1,7 +1,5 @@
-var each = require('amp-each');
 var isString = require('amp-is-string');
-var result = require('amp-result');
-var parse = require('./parse');
+var parse = require('html-parse-stringify').parse;
 var domify = require('domify');
 
 var h = require('virtual-dom/h');
