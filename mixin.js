@@ -1,10 +1,8 @@
+var parse = require('html-parse-stringify').parse;
 var h = require('virtual-dom/h');
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
 var createElement = require('virtual-dom/create-element');
-
-var isString = require('amp-is-string');
-var parse = require('./parse');
 
 
 module.exports = {
