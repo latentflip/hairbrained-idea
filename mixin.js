@@ -1,23 +1,31 @@
-var each = require('amp-each');
-var isString = require('amp-is-string');
-var result = require('amp-result');
-var parse = require('./parse');
-var domify = require('domify');
-
 var h = require('virtual-dom/h');
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
 var createElement = require('virtual-dom/create-element');
 
-
+var isString = require('amp-is-string');
+var parse = require('./parse');
 
 
 module.exports = {
     props: {
         tree: 'any'
     },
+    //there's gotta be a better way to deal with this
+    renderOnViewChange: function () {
+        var lock = false;
+        //this.on('change', function () {
+        //    if (!lock) {
+        //        lock = true;
+        //        console.log('render');
+        //        this.render();
+        //        lock = false;
+        //    } else {
+        //        console.log('Blocked');
+        //    }
+        //});
+    },
     renderOnModelChange: function () {
-        this.listenTo(this, 'change:time', this.render);
         if (this.model) {
             this.listenTo(this.model, 'change', this.render);
         }
@@ -33,7 +41,7 @@ module.exports = {
         }
 
         newTree = this.tovdom(parse(renderedTemplate, {
-            components: this.components || {}                          
+            components: this.components || {}
         }), this);
 
         if (firstRender) {
@@ -53,14 +61,15 @@ module.exports = {
         }
 
         if (ast.type === 'tag') {
-            return h(ast.name, ast.attrs, ast.children.map(this.tovdom, this));
+            return h(ast.name, this.parseTagAttrs(ast.attrs), ast.children.map(this.tovdom, this));
         }
 
         if (ast.type === 'component') {
             var Constructor = this.components[ast.name];
             var attrs = this.parseComponentAttrs(ast.attrs);
 
-            var x = {
+            return {
+                type: 'Widget',
                 name: 'MyWidget',
                 id: ast.attrs.key,
                 key: ast.attrs.key,
@@ -76,10 +85,8 @@ module.exports = {
                 },
                 destroy: function () {
                     this.view.remove();
-                },
-                type: 'Widget'
+                }
             };
-            return x;
         }
     },
 
@@ -101,6 +108,26 @@ module.exports = {
             }
         }
         return res;
+    },
+    parseTagAttrs: function (attrs) {
+        var res = {};
+        res.attributes = attrs.attributes || {};
+        var key, val;
+        for (key in attrs) {
+            val = attrs[key];
+            if (key.slice(0,2) === 'on' && val.trim().match(/^{[^}]+}$/)) {
+                val = val.trim().slice(1,-1);
+                if (typeof this[val] === 'function') {
+                    res[key] = this[val].bind(this);
+                } else {
+                    res[key] = attrs[key];
+                }
+            } else if (key.slice(0,5) === 'data-') {
+                res.attributes[key] = attrs[key];
+            } else {
+                res[key] = attrs[key];
+            }
+        }
+        return res;
     }
 };
-

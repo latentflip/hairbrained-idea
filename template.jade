@@ -4,5 +4,8 @@ div
   if someString.length < 20
     my-subview(key="foo", aPropFromAbove='{someString}', model='{model}')
 
+  div(data-hook="click-me") click me
+  div(onclick="{onClickMe}") click me too!
+
   each val in listOfThings
     my-subview(key=val, aPropFromAbove=val, model='{model}')

@@ -45,8 +45,16 @@ var MyView = View.extend(mixin, {
         someString: ['string', true, 'foo'],
         listOfThings: ['array', true]
     },
+    events: {
+        'click [data-hook=click-me]': 'onClickMe'
+    },
+    onClickMe: function () {
+        console.log('clicked');
+    },
     initialize: function () {
+        this.renderOnViewChange();
         this.renderOnModelChange();
+        this.on('change:time', this.render);
         this.on('change:listOfThings', this.render);
         this.on('change:someString', this.render);
 
@@ -64,7 +72,7 @@ var MyView = View.extend(mixin, {
         setInterval(function () {
             i++;
             this.listOfThings = this.listOfThings.concat([i]);
-        }.bind(this), 1000);
+        }.bind(this), 5000);
     }
 });
 
