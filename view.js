@@ -37,7 +37,7 @@ var MySubview = View.extend(mixin, {
     },
     session: {
         anInteger: ['number', true, 0],
-        aPropFromAbove: ['string', true, 'default'],
+        aPropFromAbove: ['integer', true, 0],
         interval: ['number'],
     },
     initialize: function () {
