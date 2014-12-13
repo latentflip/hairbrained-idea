@@ -37,8 +37,6 @@
     "url": "https://github.com/henrikjoreteg/hairbrained-idea"
   },
   "scripts": {
-    "phil": "beefy view.js -- -t jadeify",
-    "start": "run-browser test/patch.js",
-    "test": "node test/index.js"
+    "start": "beefy view.js -- -t jadeify"
   }
 }
