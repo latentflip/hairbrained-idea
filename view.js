@@ -1,6 +1,6 @@
 var View = require('ampersand-view');
 var Model = require('ampersand-model');
-var mixin = require('./mixin');
+var mixin = require('ampersand-virtual-dom-mixin');
 
 //mixin = { renderOnModelChange: function () {} };
 var Person = Model.extend({
@@ -10,9 +10,30 @@ var Person = Model.extend({
     }
 });
 
+var SomeOtherView = View.extend({
+    template: "<div>nested view <span data-hook='num'></span></div>",
+    session: {
+        anInteger: ['number', true, 0]
+    },
+    bindings: {
+        anInteger: '[data-hook~=num]'
+    },
+    initialize: function () {
+        this.interval = setInterval(function () {
+            this.anInteger++;
+        }.bind(this), 100);
+    }
+});
+
 var MySubview = View.extend(mixin, {
     template: function (view) {
-        return "<div><h1>this is my subview " + view.anInteger + "</h1>Passed In: " + view.aPropFromAbove + "<input type='text'/>Name: " + view.model.name + ": " + view.model.age + "</div>";
+        return "<div><h1>this is my subview " + view.anInteger + "</h1>Passed In: " + view.aPropFromAbove + "<input type='text'/>Name: " + view.model.name + ": " + view.model.age + "<div data-hook='some-other-view'></div></div>";
+    },
+    subviews: {
+        something: {
+            constructor: SomeOtherView,
+            hook: 'some-other-view'
+        }
     },
     session: {
         anInteger: ['number', true, 0],
@@ -22,9 +43,10 @@ var MySubview = View.extend(mixin, {
     initialize: function () {
         window.subviews = window.subviews || [];
         window.subviews.push(this);
+        this.renderOnViewChange();
         this.renderOnModelChange();
-        this.on('change:anInteger', this.render);
-        this.on('change:aPropFromAbove', this.render);
+        //this.on('change:anInteger', this.render);
+        //this.on('change:aPropFromAbove', this.render);
         this.interval = setInterval(function () {
             this.anInteger++;
         }.bind(this), 100);
@@ -54,9 +76,9 @@ var MyView = View.extend(mixin, {
     initialize: function () {
         this.renderOnViewChange();
         this.renderOnModelChange();
-        this.on('change:time', this.render);
-        this.on('change:listOfThings', this.render);
-        this.on('change:someString', this.render);
+        //this.on('change:time', this.render);
+        //this.on('change:listOfThings', this.render);
+        //this.on('change:someString', this.render);
 
         setInterval(function () {
             this.time = Date.now();
